@@ -270,14 +270,15 @@ elif app_mode == "Add/Delete Student":
     roll_number_to_delete = st.text_input("Enter Roll Number to Delete")
 
     if st.button("Delete Student"):
-        if roll_number_to_delete.strip():  
-            success = delete_student_from_google_sheets(roll_number_to_delete)
-            if success:
-                st.success(f"Student with Roll Number {roll_number_to_delete} has been deleted.")
-            else:
-                st.error("Roll Number not found. Please enter a valid Roll Number.")
+     if roll_number_to_delete.strip(): 
+        success = delete_student_from_google_sheets(roll_number_to_delete)
+        if success:
+            st.success(f"Student with Roll Number {roll_number_to_delete} has been deleted.")
         else:
-            st.error("Please enter a valid Roll Number.")
+            st.error("Roll Number not found. Please enter a valid Roll Number.")
+    else:
+        st.warning("Please enter a valid Roll Number.") 
+
 
 
 
