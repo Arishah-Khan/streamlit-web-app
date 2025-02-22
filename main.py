@@ -107,7 +107,7 @@ st.markdown("""
 
 def authenticate_google_sheets():
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    creds = ServiceAccountCredentials.from_json_keyfile_name('google_sheets.json', scope)
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(st.secrets["google_sheets_credentials"], scope)
     client = gspread.authorize(creds)
     return client
 
@@ -267,13 +267,20 @@ elif app_mode == "Add/Delete Student":
         st.success(f"Student added! {reward}")
 
     st.write("## Delete Student")
-    roll_number_to_delete = st.text_input("Enter Roll Number to Delete")
-    delete_button = st.button("Delete Student")
-    if delete_button:
-        if roll_number_to_delete:
-            delete_student_from_google_sheets(roll_number_to_delete)
+    
+roll_number_to_delete = st.text_input("Enter Roll Number to Delete")
+
+# Button to delete student
+if st.button("Delete Student"):
+    if roll_number_to_delete.strip():  # Check if input is not empty
+        success = delete_student_from_google_sheets(roll_number_to_delete)
+        if success:
+            st.success(f"Student with Roll Number {roll_number_to_delete} has been deleted.")
         else:
-            st.error("Please enter a valid Roll Number to delete.")
+            st.error("Roll Number not found. Please enter a valid Roll Number.")
+    else:
+        st.error("Please enter a valid Roll Number.")
+
 
 elif app_mode == "Leaderboard":
     display_leaderboard()
